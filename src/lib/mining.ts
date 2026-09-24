@@ -22,7 +22,7 @@ export const COINS: Coin[] = [
   { symbol: "ETC", name: "Eth Classic", color: "#3ab83a", ratePerHash: 3.1e-6, decimals: 8 },
   { symbol: "BCH", name: "Bitcoin Cash", color: "#0ac18e", ratePerHash: 2.6e-7, decimals: 9 },
   { symbol: "XRP", name: "Ripple", color: "#23a2d9", ratePerHash: 2.9e-5, decimals: 6 },
-  { symbol: "ADA", name: "Cardano", color: "#0d1e30", ratePerHash: 8.7e-5, decimals: 6 },
+  { symbol: "ADA", name: "Cardano", color: "#4a7fd4", ratePerHash: 8.7e-5, decimals: 6 },
   { symbol: "ATOM", name: "Cosmos", color: "#6f7390", ratePerHash: 1.9e-5, decimals: 7 },
 ];
 
