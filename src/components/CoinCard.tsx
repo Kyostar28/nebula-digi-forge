@@ -61,7 +61,7 @@ export function CoinCard({ coin, balance, allocation, share, hashrate, onChange 
           aria-label={`${coin.symbol} mining power`}
           onChange={(e) => onChange(Number(e.target.value))}
           className="slider w-full"
-          style={{ ["--slider-color" as string]: coin.color }}
+          style={{ ["--slider-color" as string]: coin.color, ["--fill" as string]: allocation }}
         />
       </div>
     </div>
