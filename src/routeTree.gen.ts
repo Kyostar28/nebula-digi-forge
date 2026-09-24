@@ -10,33 +10,90 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EarnPowerRouteImport } from './routes/earn-power'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FaucetRouteImport } from './routes/faucet'
+import { Route as GamesRouteImport } from './routes/games'
+import { Route as LotteryRouteImport } from './routes/lottery'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EarnPowerRoute = EarnPowerRouteImport.update({
+  id: '/earn-power',
+  path: '/earn-power',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaucetRoute = FaucetRouteImport.update({
+  id: '/faucet',
+  path: '/faucet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LotteryRoute = LotteryRouteImport.update({
+  id: '/lottery',
+  path: '/lottery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/earn-power': typeof EarnPowerRoute
+  '/faq': typeof FaqRoute
+  '/faucet': typeof FaucetRoute
+  '/games': typeof GamesRoute
+  '/lottery': typeof LotteryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/earn-power': typeof EarnPowerRoute
+  '/faq': typeof FaqRoute
+  '/faucet': typeof FaucetRoute
+  '/games': typeof GamesRoute
+  '/lottery': typeof LotteryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/earn-power': typeof EarnPowerRoute
+  '/faq': typeof FaqRoute
+  '/faucet': typeof FaucetRoute
+  '/games': typeof GamesRoute
+  '/lottery': typeof LotteryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/earn-power' | '/faq' | '/faucet' | '/games' | '/lottery'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/earn-power' | '/faq' | '/faucet' | '/games' | '/lottery'
+  id:
+    | '__root__'
+    | '/'
+    | '/earn-power'
+    | '/faq'
+    | '/faucet'
+    | '/games'
+    | '/lottery'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EarnPowerRoute: typeof EarnPowerRoute
+  FaqRoute: typeof FaqRoute
+  FaucetRoute: typeof FaucetRoute
+  GamesRoute: typeof GamesRoute
+  LotteryRoute: typeof LotteryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +105,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/earn-power': {
+      id: '/earn-power'
+      path: '/earn-power'
+      fullPath: '/earn-power'
+      preLoaderRoute: typeof EarnPowerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faucet': {
+      id: '/faucet'
+      path: '/faucet'
+      fullPath: '/faucet'
+      preLoaderRoute: typeof FaucetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lottery': {
+      id: '/lottery'
+      path: '/lottery'
+      fullPath: '/lottery'
+      preLoaderRoute: typeof LotteryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EarnPowerRoute: EarnPowerRoute,
+  FaqRoute: FaqRoute,
+  FaucetRoute: FaucetRoute,
+  GamesRoute: GamesRoute,
+  LotteryRoute: LotteryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
