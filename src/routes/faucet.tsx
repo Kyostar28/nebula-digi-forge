@@ -68,7 +68,7 @@ function Faucet() {
         <p className="mt-4 text-sm text-muted-foreground">
           Balance actual:{" "}
           <span className="font-mono text-foreground">
-            {formatCoin(hydrated ? balances[symbol] : 0, coin.decimals)} {symbol}
+            {formatCoin(hydrated ? (balances[symbol] ?? 0) : 0, coin.decimals)} {symbol}
           </span>
         </p>
 

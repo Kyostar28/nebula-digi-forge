@@ -43,7 +43,7 @@ function Lottery() {
     }
     const win = Math.random() < 0.35;
     if (win) {
-      const prize = [50, 120, 300, 750][Math.floor(Math.random() * 4)];
+      const prize = [50, 120, 300, 750][Math.floor(Math.random() * 4)]!;
       addPower(prize);
       setResult(`¡Ganaste! +${prize} h/s añadidos a tu poder de minado.`);
     } else {

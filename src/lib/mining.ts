@@ -99,8 +99,8 @@ export function useMining() {
           const sh = shares(s.allocations);
           const balances = { ...s.balances };
           for (const c of COINS) {
-            const hash = s.power * sh[c.symbol];
-            if (hash > 0) balances[c.symbol] += hash * c.ratePerHash * dt;
+            const hash = s.power * (sh[c.symbol] ?? 0);
+            if (hash > 0) balances[c.symbol] = (balances[c.symbol] ?? 0) + hash * c.ratePerHash * dt;
           }
           return { ...s, balances, lastTick: Date.now() };
         });

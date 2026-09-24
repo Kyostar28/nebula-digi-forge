@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
 
 function Dashboard() {
   const { power, balances, allocations, shares, setAllocation, hydrated } = useMining();
-  const activeCoins = COINS.filter((c) => shares[c.symbol] > 0).length;
+  const activeCoins = COINS.filter((c) => (shares[c.symbol] ?? 0) > 0).length;
   const allocated = Object.values(allocations).reduce((a, b) => a + (b || 0), 0);
 
   return (
@@ -76,10 +76,10 @@ function Dashboard() {
           <CoinCard
             key={coin.symbol}
             coin={coin}
-            balance={hydrated ? balances[coin.symbol] : 0}
+            balance={hydrated ? (balances[coin.symbol] ?? 0) : 0}
             allocation={allocations[coin.symbol] ?? 0}
-            share={shares[coin.symbol]}
-            hashrate={power * shares[coin.symbol]}
+            share={shares[coin.symbol] ?? 0}
+            hashrate={power * (shares[coin.symbol] ?? 0)}
             onChange={(v) => setAllocation(coin.symbol, v)}
           />
         ))}
