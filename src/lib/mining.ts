@@ -33,7 +33,28 @@ type State = {
   allocations: Record<string, number>;
   balances: Record<string, number>;
   lastTick: number;
+  boosts: Boost[];
+  lastFaucet: number;
 };
+
+export type Boost = { id: string; amount: number; expiresAt: number };
+export const BOOST_DURATION = 24 * 60 * 60 * 1000;
+export const FAUCET_COOLDOWN = 5 * 60 * 1000;
+/** Probability (%) of each faucet reward 1..10 h/s. Sums to 100. */
+export const FAUCET_ODDS = [50, 10, 8, 7, 6, 5, 4, 3, 2, 5] as const;
+
+export function rollFaucet(): number {
+  let r = Math.random() * 100;
+  for (let i = 0; i < FAUCET_ODDS.length; i++) {
+    r -= FAUCET_ODDS[i]!;
+    if (r < 0) return i + 1;
+  }
+  return 1;
+}
+
+export function activeBoostPower(boosts: Boost[], now = Date.now()) {
+  return boosts.reduce((a, b) => (b.expiresAt > now ? a + b.amount : a), 0);
+}
 
 const KEY = "nebula-mining-state-v1";
 
@@ -44,7 +65,7 @@ function initial(): State {
     allocations[c.symbol] = c.symbol === "BTC" ? 1 : 0;
     balances[c.symbol] = 0;
   }
-  return { power: BASE_POWER, allocations, balances, lastTick: Date.now() };
+  return { power: BASE_POWER, allocations, balances, lastTick: Date.now(), boosts: [], lastFaucet: 0 };
 }
 
 function load(): State {
@@ -59,6 +80,8 @@ function load(): State {
       allocations: { ...base.allocations, ...parsed.allocations },
       balances: { ...base.balances, ...parsed.balances },
       lastTick: parsed.lastTick ?? Date.now(),
+      boosts: (parsed.boosts ?? []).filter((b) => b.expiresAt > Date.now()),
+      lastFaucet: parsed.lastFaucet ?? 0,
     };
   } catch {
     return initial();
@@ -96,13 +119,18 @@ export function useMining() {
       if (dt >= 0.08) {
         last = now;
         setState((s) => {
+          const t = Date.now();
+          const boosts = s.boosts.some((b) => b.expiresAt <= t)
+            ? s.boosts.filter((b) => b.expiresAt > t)
+            : s.boosts;
+          const total = s.power + activeBoostPower(boosts, t);
           const sh = shares(s.allocations);
           const balances = { ...s.balances };
           for (const c of COINS) {
-            const hash = s.power * (sh[c.symbol] ?? 0);
+            const hash = total * (sh[c.symbol] ?? 0);
             if (hash > 0) balances[c.symbol] = (balances[c.symbol] ?? 0) + hash * c.ratePerHash * dt;
           }
-          return { ...s, balances, lastTick: Date.now() };
+          return { ...s, balances, boosts, lastTick: t };
         });
       }
       raf = requestAnimationFrame(loop);
@@ -135,6 +163,19 @@ export function useMining() {
     }));
   }, []);
 
+  const claimFaucet = useCallback((): number | null => {
+    const s = stateRef.current;
+    const now = Date.now();
+    if (now - s.lastFaucet < FAUCET_COOLDOWN) return null;
+    const amount = rollFaucet();
+    const boost: Boost = { id: `${now}-${Math.random()}`, amount, expiresAt: now + BOOST_DURATION };
+    const next = { ...s, boosts: [...s.boosts, boost], lastFaucet: now };
+    stateRef.current = next;
+    setState(next);
+    window.localStorage.setItem(KEY, JSON.stringify(next));
+    return amount;
+  }, []);
+
   const reset = useCallback(() => {
     setState(initial());
     if (typeof window !== "undefined") window.localStorage.removeItem(KEY);
@@ -142,7 +183,11 @@ export function useMining() {
 
   return {
     ...state,
+    basePower: state.power,
+    boostPower: activeBoostPower(state.boosts),
+    power: state.power + activeBoostPower(state.boosts),
     hydrated,
+    claimFaucet,
     shares: shares(state.allocations),
     setAllocation,
     addPower,

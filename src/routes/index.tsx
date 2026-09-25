@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Cpu, Gauge, Layers, Zap } from "lucide-react";
+import { useState } from "react";
+import { ArrowDownToLine, ArrowUpFromLine, Cpu, Gauge, Layers, Zap } from "lucide-react";
 import { CoinCard } from "@/components/CoinCard";
 import { COINS, useMining } from "@/lib/mining";
 
@@ -23,7 +24,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Dashboard() {
-  const { power, balances, allocations, shares, setAllocation, hydrated } = useMining();
+  const [notice, setNotice] = useState<string | null>(null);
+  const { power, boostPower, balances, allocations, shares, setAllocation, hydrated } = useMining();
   const activeCoins = COINS.filter((c) => (shares[c.symbol] ?? 0) > 0).length;
   const allocated = Object.values(allocations).reduce((a, b) => a + (b || 0), 0);
 
@@ -36,17 +38,34 @@ function Dashboard() {
             Tu hashpower se reparte al 100% entre las monedas que actives.
           </p>
         </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setNotice("Los depósitos estarán disponibles próximamente.")}
+            className="panel inline-flex items-center gap-2 px-4 py-2 font-display text-xs font-bold uppercase tracking-widest text-primary"
+          >
+            <ArrowDownToLine className="h-4 w-4" /> Depósito
+          </button>
+          <button
+            type="button"
+            onClick={() => setNotice("Los retiros estarán disponibles próximamente.")}
+            className="panel inline-flex items-center gap-2 px-4 py-2 font-display text-xs font-bold uppercase tracking-widest text-accent"
+          >
+            <ArrowUpFromLine className="h-4 w-4" /> Retiro
+          </button>
         <span className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
           <span className="live-dot h-2 w-2 rounded-full bg-primary" /> Live
         </span>
+        </div>
       </div>
+      {notice && <p className="mt-3 text-right text-sm text-muted-foreground">{notice}</p>}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat
           icon={<Cpu className="h-4 w-4" />}
           label="Poder de minado"
           value={`${power.toLocaleString("en-US")} h/s`}
-          hint="100 h/s gratis por registro"
+          hint={boostPower > 0 ? `Incluye +${boostPower} h/s temporales del faucet` : "100 h/s gratis por registro"}
         />
         <Stat
           icon={<Layers className="h-4 w-4" />}
