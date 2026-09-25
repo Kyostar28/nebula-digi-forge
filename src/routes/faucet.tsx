@@ -31,7 +31,8 @@ function fmt(ms: number) {
 }
 
 function Faucet() {
-  const { claimFaucet, lastFaucet, boosts, boostPower, basePower, hydrated } = useMining();
+  const { claimFaucet, lastFaucet, boosts, boostPower, basePower, hydrated, history } = useMining();
+  const total = basePower + boostPower;
   const [now, setNow] = useState(() => Date.now());
   const [last, setLast] = useState<number | null>(null);
 
@@ -120,6 +121,47 @@ function Faucet() {
               </li>
             ))}
           </ul>
+        )}
+      </div>
+
+      <div className="panel mt-6 p-6">
+        <h2 className="text-sm font-bold uppercase tracking-widest">Historial de reclamos</h2>
+        {history.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">Sin reclamos todavía.</p>
+        ) : (
+          <div className="mt-3 max-h-96 overflow-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="text-xs uppercase tracking-widest text-muted-foreground">
+                <tr>
+                  <th className="py-2">h/s</th>
+                  <th>Reclamado</th>
+                  <th>Expira</th>
+                  <th>Impacto</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody className="font-mono text-xs">
+                {history.map((c) => {
+                  const on = c.expiresAt > now;
+                  const impact = on ? (c.amount / total) * 100 : 0;
+                  return (
+                    <tr key={c.id} className="border-t border-border/60">
+                      <td className="py-2 font-display font-bold text-primary">+{c.amount}</td>
+                      <td>{new Date(c.claimedAt).toLocaleString()}</td>
+                      <td>{new Date(c.expiresAt).toLocaleString()}</td>
+                      <td title={`Total tras reclamo: ${c.totalAfter} h/s`}>
+                        {on ? `${impact.toFixed(2)}% del total` : "0%"}
+                        <span className="block text-muted-foreground">tras reclamo: {c.totalAfter} h/s</span>
+                      </td>
+                      <td className={on ? "text-primary" : "text-muted-foreground"}>
+                        {on ? `Activo · ${fmt(c.expiresAt - now)}` : "Expirado"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

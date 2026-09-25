@@ -35,9 +35,11 @@ type State = {
   lastTick: number;
   boosts: Boost[];
   lastFaucet: number;
+  history: Claim[];
 };
 
 export type Boost = { id: string; amount: number; expiresAt: number };
+export type Claim = Boost & { claimedAt: number; totalAfter: number };
 export const BOOST_DURATION = 24 * 60 * 60 * 1000;
 export const FAUCET_COOLDOWN = 5 * 60 * 1000;
 /** Probability (%) of each faucet reward 1..10 h/s. Sums to 100. */
@@ -65,7 +67,7 @@ function initial(): State {
     allocations[c.symbol] = c.symbol === "BTC" ? 1 : 0;
     balances[c.symbol] = 0;
   }
-  return { power: BASE_POWER, allocations, balances, lastTick: Date.now(), boosts: [], lastFaucet: 0 };
+  return { power: BASE_POWER, allocations, balances, lastTick: Date.now(), boosts: [], lastFaucet: 0, history: [] };
 }
 
 function load(): State {
@@ -82,6 +84,7 @@ function load(): State {
       lastTick: parsed.lastTick ?? Date.now(),
       boosts: (parsed.boosts ?? []).filter((b) => b.expiresAt > Date.now()),
       lastFaucet: parsed.lastFaucet ?? 0,
+      history: (parsed.history ?? []).slice(0, 200),
     };
   } catch {
     return initial();
@@ -152,6 +155,14 @@ export function useMining() {
     setState((s) => ({ ...s, allocations: { ...s.allocations, [symbol]: value } }));
   }, []);
 
+  const setAllAllocations = useCallback((alloc: Record<string, number>) => {
+    setState((s) => {
+      const next: Record<string, number> = {};
+      for (const c of COINS) next[c.symbol] = Math.max(0, Math.min(100, Math.round(alloc[c.symbol] ?? 0)));
+      return { ...s, allocations: next };
+    });
+  }, []);
+
   const addPower = useCallback((amount: number) => {
     setState((s) => ({ ...s, power: s.power + amount }));
   }, []);
@@ -169,7 +180,9 @@ export function useMining() {
     if (now - s.lastFaucet < FAUCET_COOLDOWN) return null;
     const amount = rollFaucet();
     const boost: Boost = { id: `${now}-${Math.random()}`, amount, expiresAt: now + BOOST_DURATION };
-    const next = { ...s, boosts: [...s.boosts, boost], lastFaucet: now };
+    const boosts = [...s.boosts.filter((b) => b.expiresAt > now), boost];
+    const claim: Claim = { ...boost, claimedAt: now, totalAfter: s.power + activeBoostPower(boosts, now) };
+    const next = { ...s, boosts, lastFaucet: now, history: [claim, ...s.history].slice(0, 200) };
     stateRef.current = next;
     setState(next);
     window.localStorage.setItem(KEY, JSON.stringify(next));
@@ -190,6 +203,7 @@ export function useMining() {
     claimFaucet,
     shares: shares(state.allocations),
     setAllocation,
+    setAllAllocations,
     addPower,
     addBalance,
     reset,

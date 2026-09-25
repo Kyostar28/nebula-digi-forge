@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowDownToLine, ArrowUpFromLine, Cpu, Gauge, Layers, Zap } from "lucide-react";
 import { CoinCard } from "@/components/CoinCard";
+import { AiAdvisor } from "@/components/AiAdvisor";
 import { COINS, useMining } from "@/lib/mining";
 
 export const Route = createFileRoute("/")({
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/")({
 
 function Dashboard() {
   const [notice, setNotice] = useState<string | null>(null);
-  const { power, boostPower, balances, allocations, shares, setAllocation, hydrated } = useMining();
+  const { power, boostPower, balances, allocations, shares, setAllocation, setAllAllocations, hydrated } = useMining();
   const activeCoins = COINS.filter((c) => (shares[c.symbol] ?? 0) > 0).length;
   const allocated = Object.values(allocations).reduce((a, b) => a + (b || 0), 0);
 
@@ -86,6 +87,8 @@ function Dashboard() {
           hint="Mejora en Earn Power"
         />
       </div>
+
+      <AiAdvisor power={power} onApply={setAllAllocations} />
 
       <h2 className="mt-10 text-lg font-bold uppercase tracking-widest text-foreground">
         Monedas minables
