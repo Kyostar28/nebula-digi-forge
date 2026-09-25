@@ -15,7 +15,7 @@ export function CoinCard({ coin, balance, allocation, share, hashrate, onChange 
   return (
     <div
       className="panel relative flex shrink-0 flex-col justify-between overflow-hidden p-3"
-      style={{ width: 290, height: 140 }}
+      style={{ width: 290, height: 140, ["--neon" as string]: coin.color } as React.CSSProperties}
     >
       <span
         className="absolute inset-x-0 top-0 h-[2px] transition-opacity"
