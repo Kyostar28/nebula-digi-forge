@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const links = [
   { to: "/", label: "Dashboard" },
@@ -18,9 +19,13 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
         <Link to="/" className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-md bg-[var(--gradient-primary)] font-display text-sm font-bold text-primary-foreground shadow-[var(--glow-primary)]">
-            N
-          </span>
+          <img
+            src={logo}
+            alt="NebulaMine"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-md shadow-[var(--glow-primary)]"
+          />
           <span className="font-display text-lg font-bold tracking-widest text-foreground">
             NEBULA<span className="text-primary">MINE</span>
           </span>
