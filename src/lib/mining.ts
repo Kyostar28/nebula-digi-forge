@@ -24,6 +24,8 @@ export const COINS: Coin[] = [
   { symbol: "XRP", name: "Ripple", color: "#23a2d9", ratePerHash: 2.9e-5, decimals: 6 },
   { symbol: "ADA", name: "Cardano", color: "#4a7fd4", ratePerHash: 8.7e-5, decimals: 6 },
   { symbol: "ATOM", name: "Cosmos", color: "#6f7390", ratePerHash: 1.9e-5, decimals: 7 },
+  { symbol: "SUI", name: "Sui", color: "#4da2ff", ratePerHash: 6.3e-5, decimals: 7 },
+  { symbol: "AVAX", name: "Avalanche", color: "#e84142", ratePerHash: 7.8e-6, decimals: 8 },
 ];
 
 export const BASE_POWER = 100;

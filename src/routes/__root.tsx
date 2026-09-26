@@ -83,12 +83,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "NebulaMine — Cloud Mining" },
       {
         name: "description",
-        content: "Minería en la nube para 14 criptomonedas con hashpower gratis al registrarte.",
+        content: "Minería en la nube para 16 criptomonedas con hashpower gratis al registrarte.",
       },
       { property: "og:title", content: "NebulaMine — Cloud Mining" },
       {
         property: "og:description",
-        content: "Minería en la nube para 14 criptomonedas con hashpower gratis.",
+        content: "Minería en la nube para 16 criptomonedas con hashpower gratis.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -104,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
 

@@ -3,7 +3,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { streamText, Output } from "ai";
 import { z } from "zod";
 
-const SYMBOLS = ["BTC", "ETH", "LTC", "SHIB", "DOGE", "TRX", "BNB", "SOL", "POL", "ETC", "BCH", "XRP", "ADA", "ATOM"] as const;
+const SYMBOLS = ["BTC", "ETH", "LTC", "SHIB", "DOGE", "TRX", "BNB", "SOL", "POL", "ETC", "BCH", "XRP", "ADA", "ATOM", "SUI", "AVAX"] as const;
 
 const Input = z.object({ goal: z.string().min(3).max(1000), power: z.number() });
 

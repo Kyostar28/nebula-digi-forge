@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Dashboard — NebulaMine Cloud Mining" },
       {
         property: "og:description",
-        content: "Reparte tu hashpower entre 14 criptomonedas y mina en la nube en tiempo real.",
+        content: "Reparte tu hashpower entre 16 criptomonedas y mina en la nube en tiempo real.",
       },
     ],
   }),
