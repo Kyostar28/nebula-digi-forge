@@ -1,0 +1,11 @@
+# Roadmap
+- [x] Shared game store (single ticker for all pages)
+- [x] Overclock + temperature + coolant
+- [x] Network events (Crypto Storm, Dificultad de Red, Doble recompensa)
+- [x] Node levels + skill tree (/skills)
+- [x] Telemetry view on dashboard
+- [x] Rigs simulator (/rigs)
+- [x] Themes + node density (/settings)
+- [x] Daily missions + Nebula Pass (/missions)
+- [x] Browser notifications (/settings)
+- [x] Cooperative pools (/pools) — simulated locally (no real multiplayer yet)
