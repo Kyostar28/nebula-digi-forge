@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Droplets } from "lucide-react";
-import { FAUCET_COOLDOWN, FAUCET_ODDS, useMining } from "@/lib/mining";
+import { useMining } from "@/lib/mining";
 
 export const Route = createFileRoute("/faucet")({
   head: () => ({
@@ -31,7 +31,7 @@ function fmt(ms: number) {
 }
 
 function Faucet() {
-  const { claimFaucet, lastFaucet, boosts, boostPower, basePower, hydrated, history } = useMining();
+  const { claimFaucet, lastFaucet, boosts, boostPower, basePower, hydrated, history, faucetCooldown, faucetOdds, boostDuration } = useMining();
   const total = basePower + boostPower;
   const [now, setNow] = useState(() => Date.now());
   const [last, setLast] = useState<number | null>(null);
@@ -41,7 +41,7 @@ function Faucet() {
     return () => window.clearInterval(id);
   }, []);
 
-  const left = hydrated ? lastFaucet + FAUCET_COOLDOWN - now : 0;
+  const left = hydrated ? lastFaucet + faucetCooldown - now : 0;
   const active = boosts.filter((b) => b.expiresAt > now).sort((a, b) => a.expiresAt - b.expiresAt);
 
   const claim = () => {
@@ -54,7 +54,7 @@ function Faucet() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold glow-text">Faucet</h1>
       <p className="mt-2 text-muted-foreground">
-        Reclama entre 1 y 10 h/s temporales cada 5 minutos. Cada reclamo dura 24 horas.
+        Reclama entre 1 y 10 h/s temporales cada {Math.round(faucetCooldown / 6000) / 10} minutos. Cada reclamo dura {Math.round(boostDuration / 3600000)} horas.
       </p>
 
       <div className="panel mt-8 p-6">
@@ -86,7 +86,7 @@ function Faucet() {
 
         {last !== null && (
           <p className="mt-4 text-center font-mono text-sm text-primary">
-            +{last} h/s añadidos por 24 horas
+            +{last} h/s añadidos por {Math.round(boostDuration / 3600000)} horas
           </p>
         )}
       </div>
@@ -94,10 +94,10 @@ function Faucet() {
       <div className="panel mt-6 p-6">
         <h2 className="text-sm font-bold uppercase tracking-widest">Probabilidades</h2>
         <div className="mt-3 grid grid-cols-5 gap-2">
-          {FAUCET_ODDS.map((p, i) => (
+          {faucetOdds.map((p, i) => (
             <div key={i} className="rounded-md border border-border bg-muted/40 p-2 text-center">
               <p className="font-display text-sm font-bold">{i + 1} h/s</p>
-              <p className="text-xs text-muted-foreground">{p}%</p>
+              <p className="text-xs text-muted-foreground">{Math.round(p * 10) / 10}%</p>
             </div>
           ))}
         </div>
