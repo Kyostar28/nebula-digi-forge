@@ -54,7 +54,7 @@ function Faucet() {
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold glow-text">Faucet</h1>
       <p className="mt-2 text-muted-foreground">
-        Reclama entre 1 y 10 h/s temporales cada 5 minutos. Cada reclamo dura 24 horas.
+        Reclama entre 1 y 10 h/s temporales cada {Math.round(faucetCooldown / 6000) / 10} minutos. Cada reclamo dura {Math.round(boostDuration / 3600000)} horas.
       </p>
 
       <div className="panel mt-8 p-6">
@@ -86,7 +86,7 @@ function Faucet() {
 
         {last !== null && (
           <p className="mt-4 text-center font-mono text-sm text-primary">
-            +{last} h/s añadidos por 24 horas
+            +{last} h/s añadidos por {Math.round(boostDuration / 3600000)} horas
           </p>
         )}
       </div>
@@ -97,7 +97,7 @@ function Faucet() {
           {faucetOdds.map((p, i) => (
             <div key={i} className="rounded-md border border-border bg-muted/40 p-2 text-center">
               <p className="font-display text-sm font-bold">{i + 1} h/s</p>
-              <p className="text-xs text-muted-foreground">{p}%</p>
+              <p className="text-xs text-muted-foreground">{Math.round(p * 10) / 10}%</p>
             </div>
           ))}
         </div>

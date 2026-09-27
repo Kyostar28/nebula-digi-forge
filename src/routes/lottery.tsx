@@ -21,7 +21,7 @@ export const Route = createFileRoute("/lottery")({
 const TICKET_COST = 20;
 
 function Lottery() {
-  const { power, addPower } = useMining();
+  const { power, addPower, tickets: freeTickets, useTicket } = useMining();
   const [tickets, setTickets] = useState<number[]>([]);
   const [result, setResult] = useState<string | null>(null);
 
@@ -34,6 +34,16 @@ function Lottery() {
     const n = Math.floor(100000 + Math.random() * 900000);
     setTickets((t) => [n, ...t].slice(0, 12));
     setResult(`Ticket #${n} registrado para el sorteo.`);
+  };
+
+  const redeem = () => {
+    if (!useTicket()) {
+      setResult("No tienes tickets gratis. Gánalos durante eventos de Dificultad de Red.");
+      return;
+    }
+    const n = Math.floor(100000 + Math.random() * 900000);
+    setTickets((t) => [n, ...t].slice(0, 12));
+    setResult(`Ticket gratis #${n} registrado.`);
   };
 
   const draw = () => {
@@ -74,6 +84,13 @@ function Lottery() {
             style={{ background: "var(--gradient-primary)", boxShadow: "var(--glow-primary)" }}
           >
             <Ticket className="h-4 w-4" /> Comprar ticket
+          </button>
+          <button
+            type="button"
+            onClick={redeem}
+            className="rounded-md border border-accent/50 px-4 py-2.5 font-display text-sm font-bold uppercase tracking-widest text-accent transition-colors hover:bg-accent/10"
+          >
+            Usar gratis ({freeTickets})
           </button>
           <button
             type="button"
