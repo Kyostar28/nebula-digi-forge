@@ -504,7 +504,7 @@ export const actions = {
   stopOverclock() {
     set((s) => ({ ...s, ocUntil: 0 }));
   },
-  useCoolant(): boolean {
+  applyCoolant(): boolean {
     if (state.coolant <= 0) return false;
     set((s) => ({ ...s, coolant: s.coolant - 1, temp: Math.max(TEMP_IDLE, s.temp - 30), throttleUntil: 0 }));
     return true;
@@ -551,7 +551,7 @@ export const actions = {
       return { ...s, power: s.power + passReward(tier), passClaimed: [...s.passClaimed, tier], titles };
     });
   },
-  useTicket(): boolean {
+  spendTicket(): boolean {
     if (state.tickets <= 0) return false;
     set((s) => ({ ...s, tickets: s.tickets - 1 }));
     return true;

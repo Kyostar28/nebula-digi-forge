@@ -21,7 +21,7 @@ export const Route = createFileRoute("/lottery")({
 const TICKET_COST = 20;
 
 function Lottery() {
-  const { power, addPower, tickets: freeTickets, useTicket } = useMining();
+  const { power, addPower, tickets: freeTickets, spendTicket } = useMining();
   const [tickets, setTickets] = useState<number[]>([]);
   const [result, setResult] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ function Lottery() {
   };
 
   const redeem = () => {
-    if (!useTicket()) {
+    if (!spendTicket()) {
       setResult("No tienes tickets gratis. Gánalos durante eventos de Dificultad de Red.");
       return;
     }
