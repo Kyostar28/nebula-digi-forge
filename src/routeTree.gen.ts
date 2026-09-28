@@ -15,6 +15,11 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FaucetRouteImport } from './routes/faucet'
 import { Route as GamesRouteImport } from './routes/games'
 import { Route as LotteryRouteImport } from './routes/lottery'
+import { Route as MissionsRouteImport } from './routes/missions'
+import { Route as PoolsRouteImport } from './routes/pools'
+import { Route as RigsRouteImport } from './routes/rigs'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SkillsRouteImport } from './routes/skills'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +51,31 @@ const LotteryRoute = LotteryRouteImport.update({
   path: '/lottery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MissionsRoute = MissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoolsRoute = PoolsRouteImport.update({
+  id: '/pools',
+  path: '/pools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RigsRoute = RigsRouteImport.update({
+  id: '/rigs',
+  path: '/rigs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsRoute = SkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +84,11 @@ export interface FileRoutesByFullPath {
   '/faucet': typeof FaucetRoute
   '/games': typeof GamesRoute
   '/lottery': typeof LotteryRoute
+  '/missions': typeof MissionsRoute
+  '/pools': typeof PoolsRoute
+  '/rigs': typeof RigsRoute
+  '/settings': typeof SettingsRoute
+  '/skills': typeof SkillsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +97,11 @@ export interface FileRoutesByTo {
   '/faucet': typeof FaucetRoute
   '/games': typeof GamesRoute
   '/lottery': typeof LotteryRoute
+  '/missions': typeof MissionsRoute
+  '/pools': typeof PoolsRoute
+  '/rigs': typeof RigsRoute
+  '/settings': typeof SettingsRoute
+  '/skills': typeof SkillsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +111,39 @@ export interface FileRoutesById {
   '/faucet': typeof FaucetRoute
   '/games': typeof GamesRoute
   '/lottery': typeof LotteryRoute
+  '/missions': typeof MissionsRoute
+  '/pools': typeof PoolsRoute
+  '/rigs': typeof RigsRoute
+  '/settings': typeof SettingsRoute
+  '/skills': typeof SkillsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/earn-power' | '/faq' | '/faucet' | '/games' | '/lottery'
+  fullPaths:
+    | '/'
+    | '/earn-power'
+    | '/faq'
+    | '/faucet'
+    | '/games'
+    | '/lottery'
+    | '/missions'
+    | '/pools'
+    | '/rigs'
+    | '/settings'
+    | '/skills'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/earn-power' | '/faq' | '/faucet' | '/games' | '/lottery'
+  to:
+    | '/'
+    | '/earn-power'
+    | '/faq'
+    | '/faucet'
+    | '/games'
+    | '/lottery'
+    | '/missions'
+    | '/pools'
+    | '/rigs'
+    | '/settings'
+    | '/skills'
   id:
     | '__root__'
     | '/'
@@ -85,6 +152,11 @@ export interface FileRouteTypes {
     | '/faucet'
     | '/games'
     | '/lottery'
+    | '/missions'
+    | '/pools'
+    | '/rigs'
+    | '/settings'
+    | '/skills'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +166,11 @@ export interface RootRouteChildren {
   FaucetRoute: typeof FaucetRoute
   GamesRoute: typeof GamesRoute
   LotteryRoute: typeof LotteryRoute
+  MissionsRoute: typeof MissionsRoute
+  PoolsRoute: typeof PoolsRoute
+  RigsRoute: typeof RigsRoute
+  SettingsRoute: typeof SettingsRoute
+  SkillsRoute: typeof SkillsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +217,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LotteryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/missions': {
+      id: '/missions'
+      path: '/missions'
+      fullPath: '/missions'
+      preLoaderRoute: typeof MissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pools': {
+      id: '/pools'
+      path: '/pools'
+      fullPath: '/pools'
+      preLoaderRoute: typeof PoolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rigs': {
+      id: '/rigs'
+      path: '/rigs'
+      fullPath: '/rigs'
+      preLoaderRoute: typeof RigsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills': {
+      id: '/skills'
+      path: '/skills'
+      fullPath: '/skills'
+      preLoaderRoute: typeof SkillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +262,11 @@ const rootRouteChildren: RootRouteChildren = {
   FaucetRoute: FaucetRoute,
   GamesRoute: GamesRoute,
   LotteryRoute: LotteryRoute,
+  MissionsRoute: MissionsRoute,
+  PoolsRoute: PoolsRoute,
+  RigsRoute: RigsRoute,
+  SettingsRoute: SettingsRoute,
+  SkillsRoute: SkillsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
